@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#123f86">
+<title>工作进展档案｜Work Progress</title>
+<style>
+:root{
+  --navy:#102b59;--blue:#1768d2;--blue2:#3d8df5;--cyan:#72d5ff;
+  --ink:#172b4d;--muted:#667894;--line:#e3ebf6;--surface:#fff;
+  --pale:#f3f7fd;--shadow:0 16px 44px rgba(23,73,139,.09);
+  --radius:20px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:#f5f8fd;color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;line-height:1.58}
+button,input{font:inherit}
+.shell{max-width:1180px;margin:0 auto;padding:28px 28px 64px}
+.hero{position:relative;overflow:hidden;border-radius:28px;padding:34px 38px 30px;color:#fff;background:linear-gradient(118deg,#102b59 0%,#1555a7 48%,#287fe4 100%);box-shadow:0 22px 55px rgba(20,78,153,.22)}
+.hero:before,.hero:after{content:"";position:absolute;border-radius:50%;pointer-events:none}
+.hero:before{width:440px;height:440px;right:-90px;top:-270px;background:radial-gradient(circle,rgba(125,218,255,.42),rgba(125,218,255,0) 68%)}
+.hero:after{width:360px;height:360px;right:180px;bottom:-300px;border:1px solid rgba(255,255,255,.15);box-shadow:0 0 0 38px rgba(255,255,255,.035),0 0 0 78px rgba(255,255,255,.025)}
+.hero-inner{position:relative;z-index:1}
+.eyebrow{display:flex;align-items:center;gap:10px;text-transform:uppercase;letter-spacing:.16em;font-size:11px;font-weight:800;color:#b9ddff}
+.eyebrow .dot{width:7px;height:7px;border-radius:50%;background:#8be0ff;box-shadow:0 0 0 5px rgba(139,224,255,.13)}
+.hero h1{font-size:clamp(30px,4vw,44px);line-height:1.16;letter-spacing:-.04em;margin:17px 0 10px;font-weight:760}
+.hero p{max-width:680px;margin:0;color:#d8eaff;font-size:14px}
+.hero-bottom{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-top:30px;padding-top:19px;border-top:1px solid rgba(255,255,255,.18);font-size:12px;color:#c6ddf8}
+.hero-tag{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(255,255,255,.23);background:rgba(255,255,255,.09);border-radius:999px;padding:7px 12px;color:#fff}
+.hero-tag b{font-size:11px;letter-spacing:.03em}
+.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:20px 0 26px}
+.metric{background:var(--surface);border:1px solid var(--line);border-radius:17px;padding:18px 20px;box-shadow:0 5px 18px rgba(25,70,130,.035)}
+.metric-label{font-size:12px;color:var(--muted);font-weight:650}
+.metric-value{font-size:30px;line-height:1.2;letter-spacing:-.04em;font-weight:780;color:#143c78;margin-top:8px}
+.metric-note{font-size:11px;color:#8796ab;margin-top:5px}
+.toolbar{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:24px 0 16px}
+.tabs{display:flex;gap:5px;padding:5px;border:1px solid var(--line);background:#edf3fb;border-radius:13px}
+.tab{border:0;background:transparent;color:#63748e;padding:9px 15px;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;transition:.2s}
+.tab.active{background:#fff;color:#155bb7;box-shadow:0 3px 10px rgba(30,74,130,.1)}
+.search-wrap{position:relative;width:min(290px,42vw)}
+.search-wrap input{width:100%;border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 13px 10px 36px;outline:none;color:var(--ink);font-size:12px}
+.search-wrap input:focus{border-color:#79aef0;box-shadow:0 0 0 3px rgba(52,126,220,.1)}
+.search-icon{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:#8092ad;font-size:15px}
+.section-head{display:flex;justify-content:space-between;align-items:end;gap:16px;margin:28px 0 14px}
+.section-head h2{font-size:19px;letter-spacing:-.02em;margin:0;color:#17365f}
+.section-head p{font-size:12px;color:var(--muted);margin:4px 0 0}
+.section-kicker{font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:#4785ce;font-weight:800}
+.project-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+.project-card{background:#fff;border:1px solid var(--line);border-radius:19px;padding:20px 21px;box-shadow:0 8px 24px rgba(24,65,122,.045);transition:transform .18s,box-shadow .18s}
+.project-card:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+.card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.project-code{font-size:10px;letter-spacing:.11em;color:#6b8db9;font-weight:800}
+.project-card h3{font-size:17px;line-height:1.35;margin:7px 0 0;color:#18375f}
+.status{white-space:nowrap;font-size:10px;font-weight:750;border-radius:999px;padding:6px 10px;background:#eaf3ff;color:#2167b7}
+.status.neutral{background:#f0f3f8;color:#66758b}
+.card-meta{display:flex;flex-wrap:wrap;gap:7px;margin:15px 0 12px}
+.pill{font-size:10px;color:#5d7190;background:#f2f6fb;border:1px solid #e7eef7;border-radius:7px;padding:4px 8px}
+.card-summary{font-size:12px;color:#536781;margin:0;min-height:38px}
+.card-foot{display:flex;justify-content:space-between;align-items:center;border-top:1px solid #edf1f7;margin-top:16px;padding-top:13px;font-size:11px;color:#8291a6}
+.detail-toggle{border:0;background:transparent;color:#1768c8;font-weight:750;font-size:11px;cursor:pointer;padding:4px 0}
+.detail-panel{display:none;border-top:1px solid #edf1f7;margin-top:14px;padding-top:14px}
+.project-card.open .detail-panel{display:block}
+.detail-row{margin:0 0 12px}
+.detail-label{font-size:10px;color:#7b8da7;font-weight:800;letter-spacing:.04em;margin-bottom:4px}
+.detail-text{font-size:12px;color:#405672}
+.workstream{border:1px solid #e6eef8;background:#f8fbff;border-radius:12px;padding:12px 13px;margin-top:9px}
+.workstream h4{font-size:12px;color:#1c579c;margin:0 0 5px}
+.workstream p{font-size:11px;color:#586e89;margin:0}
+.log-list{position:relative;margin:8px 0 0;padding-left:22px}
+.log-list:before{content:"";position:absolute;left:6px;top:8px;bottom:8px;width:1px;background:linear-gradient(#5aa8f5,#d7e6f8)}
+.log-item{position:relative;background:#fff;border:1px solid var(--line);border-radius:16px;padding:17px 19px;margin:0 0 12px;box-shadow:0 5px 17px rgba(24,65,122,.035)}
+.log-item:before{content:"";position:absolute;width:11px;height:11px;border-radius:50%;left:-21px;top:22px;background:#2f83e6;border:3px solid #e8f3ff;box-shadow:0 0 0 1px #8cbcf0}
+.log-date{font-size:10px;letter-spacing:.08em;color:#4c83bf;font-weight:800}
+.log-item h3{font-size:14px;margin:5px 0 5px;color:#193c68}
+.log-item p{font-size:12px;color:#5a6f8a;margin:0}
+.log-meta{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
+.empty{padding:38px 20px;text-align:center;color:#8392a7;background:#fff;border:1px dashed #d9e4f2;border-radius:16px;font-size:13px}
+.notice{display:flex;gap:12px;align-items:flex-start;background:linear-gradient(110deg,#edf5ff,#f8fbff);border:1px solid #dceafb;border-radius:15px;padding:14px 16px;margin-top:22px;color:#526d8d}
+.notice-icon{font-size:17px}
+.notice strong{display:block;font-size:11px;color:#235b9c;margin-bottom:3px}
+.notice span{display:block;font-size:11px;line-height:1.6}
+.footer{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-top:28px;padding:18px 2px 0;border-top:1px solid #e3ebf5;color:#8a99ad;font-size:10px}
+.hidden{display:none!important}
+@media(max-width:760px){
+ .shell{padding:14px 14px 42px}.hero{padding:26px 23px 22px;border-radius:22px}.hero-bottom{align-items:flex-start;flex-direction:column}.metrics{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.metric{padding:15px}.metric-value{font-size:26px}.toolbar{align-items:stretch;flex-direction:column}.tabs{overflow:auto}.tab{white-space:nowrap}.search-wrap{width:100%}.project-grid{grid-template-columns:1fr}.section-head{align-items:flex-start;flex-direction:column}.footer{align-items:flex-start;flex-direction:column}
+}
+@media print{
+ body{background:#fff}.shell{max-width:none;padding:0}.hero{box-shadow:none;-webkit-print-color-adjust:exact;print-color-adjust:exact}.toolbar,.notice,.detail-toggle{display:none!important}.project-card,.metric,.log-item{break-inside:avoid;box-shadow:none}.detail-panel{display:block!important}.project-grid{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="eyebrow"><span class="dot"></span> PERSONAL WORK ARCHIVE · 2026</div>
+      <h1>工作进展档案</h1>
+      <p>以项目为主线沉淀工作，以时间为轴记录进展。聚合重点项目、关键交付与阶段性行动，形成可持续追踪的工作记录。</p>
+      <div class="hero-bottom">
+        <span>工作范围：2026 年 10 月至今</span>
+        <span class="hero-tag"><b>BLUE SERIES</b><span>持续更新 · 版本化归档</span></span>
+      </div>
+    </div>
+  </header>
+
+  <section class="metrics" aria-label="工作概览">
+    <div class="metric"><div class="metric-label">项目档案</div><div class="metric-value">04</div><div class="metric-note">独立项目 / 工作事项</div></div>
+    <div class="metric"><div class="metric-label">已知材料迭代</div><div class="metric-value">16</div><div class="metric-note">9265 两项交付累计版本迭代</div></div>
+    <div class="metric"><div class="metric-label">Reclaim 研究板块</div><div class="metric-value">02</div><div class="metric-note">外部市场洞察 + 内部需求测算</div></div>
+    <div class="metric"><div class="metric-label">已归档工作记录</div><div class="metric-value">04</div><div class="metric-note">按时间记录关键工作节点</div></div>
+  </section>
+
+  <div class="toolbar">
+    <nav class="tabs" aria-label="内容视图">
+      <button class="tab active" data-view="overview">工作总览</button>
+      <button class="tab" data-view="projects">项目档案</button>
+      <button class="tab" data-view="logs">工作记录</button>
+    </nav>
+    <label class="search-wrap"><span class="search-icon">⌕</span><input id="search" type="search" placeholder="搜索项目、内容或关键词…" aria-label="搜索项目和工作记录"></label>
+  </div>
+
+  <main>
+    <section id="view-overview" class="view">
+      <div class="section-head">
+        <div><div class="section-kicker">PORTFOLIO</div><h2>当前工作组合</h2><p>按工作主题查看重点事项；详细信息请进入项目档案。</p></div>
+      </div>
+      <div class="project-grid">
+        <article class="project-card" data-search="9265 市场洞察 看客户 集团汇报 5个版本">
+          <div class="card-top"><div><div class="project-code">P-01 · 9265 GROUP REPORT</div><h3>9265 市场洞察—看客户</h3></div><span class="status">持续迭代</span></div>
+          <div class="card-meta"><span class="pill">集团汇报</span><span class="pill">客户洞察</span><span class="pill">5 个版本</span></div>
+          <p class="card-summary">围绕客户维度形成集团汇报材料，并根据领导要求持续迭代。</p>
+          <div class="card-foot"><span>2026 年 10 月起</span><button class="detail-toggle" data-goto="projects">查看项目档案 ↗</button></div>
+        </article>
+        <article class="project-card" data-search="9265 ICBU 战略解码 集团汇报 11个版本">
+          <div class="card-top"><div><div class="project-code">P-02 · 9265 GROUP REPORT</div><h3>9265 ICBU 战略解码</h3></div><span class="status">持续迭代</span></div>
+          <div class="card-meta"><span class="pill">集团汇报</span><span class="pill">战略解码</span><span class="pill">11 个版本</span></div>
+          <p class="card-summary">围绕 ICBU 战略解码形成集团汇报材料，并根据领导要求持续迭代。</p>
+          <div class="card-foot"><span>2026 年 10 月起</span><button class="detail-toggle" data-goto="projects">查看项目档案 ↗</button></div>
+        </article>
+        <article class="project-card" data-search="Reclaim Wafer 再生晶圆 市场洞察 竞争对手 投资 孙总 营销委员会 前台BU 销售调研">
+          <div class="card-top"><div><div class="project-code">P-03 · NEW BUSINESS RESEARCH</div><h3>Reclaim Wafer 市场洞察与投资研究</h3></div><span class="status">研究推进</span></div>
+          <div class="card-meta"><span class="pill">新业务评估</span><span class="pill">市场竞争</span><span class="pill">需求测算</span></div>
+          <p class="card-summary">围绕投资可能性，结合外部竞争格局与前台 BU 销售调研，开展市场研究和需求分解测算。</p>
+          <div class="card-foot"><span>2026.10.26 启动</span><button class="detail-toggle" data-goto="projects">查看项目档案 ↗</button></div>
+        </article>
+        <article class="project-card" data-search="长江存储 Yangtze Memory 杨书鹏 拜访材料 LTA 谈判">
+          <div class="card-top"><div><div class="project-code">P-04 · CUSTOMER SUPPORT</div><h3>长江存储客户拜访材料支持</h3></div><span class="status neutral">单次支持记录</span></div>
+          <div class="card-meta"><span class="pill">客户支持</span><span class="pill">LTA 沟通</span></div>
+          <p class="card-summary">协助修改客户拜访材料，支持长期供货协议相关谈判沟通准备。</p>
+          <div class="card-foot"><span>2026.10.21</span><button class="detail-toggle" data-goto="projects">查看项目档案 ↗</button></div>
+        </article>
+      </div>
+      <div class="notice"><div class="notice-icon">ⓘ</div><div><strong>记录口径</strong><span>当前页面只呈现已提供的信息。尚未确认的完成度、最终结论、量化成果和后续计划不作推断；新增进展将追加到对应项目历史中。</span></div></div>
+    </section>
+
+    <section id="view-projects" class="view hidden">
+      <div class="section-head">
+        <div><div class="section-kicker">PROJECT REGISTER</div><h2>项目档案</h2><p>记录项目来源、工作范围与已知进展；展开卡片查看项目结构。</p></div>
+      </div>
+      <div class="project-grid" id="project-register">
+        <article class="project-card" data-search="9265 市场洞察 看客户 集团汇报 5个版本 领导">
+          <div class="card-top"><div><div class="project-code">P-01 · 9265 GROUP REPORT</div><h3>9265 市场洞察—看客户</h3></div><span class="status">持续迭代</span></div>
+          <div class="card-meta"><span class="pill">项目周期：2026 年 10 月起</span><span class="pill">材料迭代：5 个版本</span></div>
+          <div class="card-foot"><span>归属：9265 集团汇报</span><button class="detail-toggle">展开档案 ＋</button></div>
+          <div class="detail-panel">
+            <div class="detail-row"><div class="detail-label">项目来源</div><div class="detail-text">公司面向集团的 9265 汇报工作要求。</div></div>
+            <div class="detail-row"><div class="detail-label">工作目标 / 交付</div><div class="detail-text">形成 9265 市场洞察—看客户专题汇报材料。</div></div>
+            <div class="detail-row"><div class="detail-label">已知进展</div><div class="detail-text">自 2026 年 10 月起持续开展，按领导要求迭代 5 个版本。</div></div>
+            <div class="detail-row"><div class="detail-label">待补充</div><div class="detail-text">最终采用版本、核心结论、领导反馈及后续动作。</div></div>
+          </div>
+        </article>
+
+        <article class="project-card" data-search="9265 ICBU 战略解码 集团汇报 11个版本 领导">
+          <div class="card-top"><div><div class="project-code">P-02 · 9265 GROUP REPORT</div><h3>9265 ICBU 战略解码</h3></div><span class="status">持续迭代</span></div>
+          <div class="card-meta"><span class="pill">项目周期：2026 年 10 月起</span><span class="pill">材料迭代：11 个版本</span></div>
+          <div class="card-foot"><span>归属：9265 集团汇报</span><button class="detail-toggle">展开档案 ＋</button></div>
+          <div class="detail-panel">
+            <div class="detail-row"><div class="detail-label">项目来源</div><div class="detail-text">公司面向集团的 9265 汇报工作要求。</div></div>
+            <div class="detail-row"><div class="detail-label">工作目标 / 交付</div><div class="detail-text">形成 9265 ICBU 战略解码专题汇报材料。</div></div>
+            <div class="detail-row"><div class="detail-label">已知进展</div><div class="detail-text">自 2026 年 10 月起持续开展，按领导要求迭代 11 个版本。</div></div>
+            <div class="detail-row"><div class="detail-label">待补充</div><div class="detail-text">最终采用版本、关键战略判断、领导反馈及后续动作。</div></div>
+          </div>
+        </article>
+
+        <article class="project-card" data-search="Reclaim Wafer 再生晶圆 投资 孙总 营销委员会 竞争对手 市场 前台BU 销售调研">
+          <div class="card-top"><div><div class="project-code">P-03 · NEW BUSINESS RESEARCH</div><h3>Reclaim Wafer 市场洞察与投资研究</h3></div><span class="status">研究推进</span></div>
+          <div class="card-meta"><span class="pill">启动：2026.10.26</span><span class="pill">双板块研究</span><span class="pill">投资前期分析</span></div>
+          <div class="card-foot"><span>项目来源：营销委员会议题</span><button class="detail-toggle">展开档案 ＋</button></div>
+          <div class="detail-panel">
+            <div class="detail-row"><div class="detail-label">项目来源</div><div class="detail-text">2026 年 10 月 26 日起开展；孙总在营销委员会提出考虑投资再生晶圆项目，由此启动市场洞察与业务切入研究。</div></div>
+            <div class="detail-row"><div class="detail-label">研究目标</div><div class="detail-text">判断再生晶圆市场机会、竞争格局与公司潜在业务切入空间，为后续投资研判提供依据。</div></div>
+            <div class="workstream"><h4>板块一｜外部市场与竞争对手洞察</h4><p>与 ChatGPT 协同开展市场研究，聚焦全球及中国市场需求、竞争对手与供应格局、厂商技术和制程布局、商业模式，以及潜在业务切入点。</p></div>
+            <div class="workstream"><h4>板块二｜前台 BU 销售调研数据分解测算</h4><p>基于前台 BU 销售调研数据拆解客户需求与产品结构；涉及 CU / N-CU、产品档位、供应商、价格、循环次数、分配量、良率要求、去除量、设备要求及最终厚度等维度，按实际数据可用性开展测算。</p></div>
+            <div class="detail-row" style="margin-top:12px"><div class="detail-label">待补充</div><div class="detail-text">当前阶段结论、市场规模测算口径、可服务需求量、投资假设、下一阶段决策节点。</div></div>
+          </div>
+        </article>
+
+        <article class="project-card" data-search="长江存储 Yangtze Memory 杨书鹏 拜访材料 LTA 谈判沟通">
+          <div class="card-top"><div><div class="project-code">P-04 · CUSTOMER SUPPORT</div><h3>长江存储客户拜访材料支持</h3></div><span class="status neutral">单次支持记录</span></div>
+          <div class="card-meta"><span class="pill">日期：2026.10.21</span><span class="pill">LTA 谈判沟通</span></div>
+          <div class="card-foot"><span>协作对象：杨书鹏</span><button class="detail-toggle">展开档案 ＋</button></div>
+          <div class="detail-panel">
+            <div class="detail-row"><div class="detail-label">工作背景</div><div class="detail-text">协助杨书鹏准备长江存储客户拜访相关材料。</div></div>
+            <div class="detail-row"><div class="detail-label">工作内容</div><div class="detail-text">修改拜访材料，涉及 LTA（长期供货协议）谈判与沟通内容。</div></div>
+            <div class="detail-row"><div class="detail-label">待补充</div><div class="detail-text">拜访结果、谈判结论及后续跟进事项（如有）。</div></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="view-logs" class="view hidden">
+      <div class="section-head">
+        <div><div class="section-kicker">WORK JOURNAL</div><h2>工作记录</h2><p>按时间记录实际发生的工作动作；不重复展开项目背景。</p></div>
+      </div>
+      <div class="log-list" id="log-list">
+        <article class="log-item" data-search="2026 10 21 长江存储 杨书鹏 拜访材料 LTA 谈判沟通">
+          <div class="log-date">2026.10.21</div>
+          <h3>长江存储拜访材料修改支持</h3>
+          <p>协助杨书鹏修改长江存储拜访材料，内容涉及 LTA（长期供货协议）谈判与沟通。</p>
+          <div class="log-meta"><span class="pill">客户支持</span><span class="pill">关联项目 P-04</span></div>
+        </article>
+        <article class="log-item" data-search="2026 10 26 Reclaim Wafer 再生晶圆 孙总 营销委员会 市场洞察 竞争对手 前台BU 销售调研">
+          <div class="log-date">2026.10.26 起</div>
+          <h3>启动 Reclaim Wafer 市场洞察与投资前期研究</h3>
+          <p>因孙总在营销委员会提出考虑投资再生晶圆项目，启动研究；工作分为外部市场与竞争对手洞察、前台 BU 销售调研数据分解测算两个板块。</p>
+          <div class="log-meta"><span class="pill">新业务研究</span><span class="pill">关联项目 P-03</span></div>
+        </article>
+        <article class="log-item" data-search="2026 10 9265 市场洞察 看客户 5个版本 集团汇报">
+          <div class="log-date">2026 年 10 月起 · 持续至今</div>
+          <h3>9265 市场洞察—看客户材料迭代</h3>
+          <p>围绕集团汇报要求持续完善材料，按领导要求累计迭代 5 个版本。</p>
+          <div class="log-meta"><span class="pill">集团汇报</span><span class="pill">5 个版本</span><span class="pill">关联项目 P-01</span></div>
+        </article>
+        <article class="log-item" data-search="2026 10 9265 ICBU 战略解码 11个版本 集团汇报">
+          <div class="log-date">2026 年 10 月起 · 持续至今</div>
+          <h3>9265 ICBU 战略解码材料迭代</h3>
+          <p>围绕集团汇报要求持续完善 ICBU 战略解码材料，按领导要求累计迭代 11 个版本。</p>
+          <div class="log-meta"><span class="pill">集团汇报</span><span class="pill">11 个版本</span><span class="pill">关联项目 P-02</span></div>
+        </article>
+      </div>
+    </section>
+    <div id="no-results" class="empty hidden">没有找到匹配的内容，请尝试其他关键词。</div>
+  </main>
+
+  <footer class="footer">
+    <span>WORK PROGRESS ARCHIVE · 持续维护的项目与工作记录</span>
+    <span>更新版本：2026.11.02</span>
+  </footer>
+</div>
+<script>
+(function(){
+  const tabs = Array.from(document.querySelectorAll('.tab'));
+  const views = Array.from(document.querySelectorAll('.view'));
+  const search = document.getElementById('search');
+  const noResults = document.getElementById('no-results');
+  let currentView = 'overview';
+
+  function setView(name){
+    currentView = name;
+    tabs.forEach(btn => btn.classList.toggle('active', btn.dataset.view === name));
+    views.forEach(view => view.classList.toggle('hidden', view.id !== 'view-' + name));
+    filterContent();
+  }
+  function filterContent(){
+    const query = (search.value || '').trim().toLowerCase();
+    const active = document.getElementById('view-' + currentView);
+    const cards = Array.from(active.querySelectorAll('[data-search]'));
+    let shown = 0;
+    cards.forEach(card => {
+      const haystack = (card.getAttribute('data-search') + ' ' + card.textContent).toLowerCase();
+      const match = !query || haystack.includes(query);
+      card.classList.toggle('hidden', !match);
+      if(match) shown++;
+    });
+    noResults.classList.toggle('hidden', !query || shown > 0);
+  }
+  tabs.forEach(btn => btn.addEventListener('click', () => setView(btn.dataset.view)));
+  search.addEventListener('input', filterContent);
+  document.querySelectorAll('.project-card .detail-toggle').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if(btn.dataset.goto){ setView(btn.dataset.goto); return; }
+      const card = btn.closest('.project-card');
+      const open = card.classList.toggle('open');
+      btn.textContent = open ? '收起档案 −' : '展开档案 ＋';
+    });
+  });
+})();
+</script>
+</body>
+</html>
