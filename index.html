@@ -1,0 +1,726 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#123D7A">
+<title>Work Progress | 工作进展档案</title>
+<style>
+:root{
+--navy:#102B59;--blue:#1768C8;--bright:#328BEA;
+--ink:#193354;--muted:#75869D;--line:#E3EBF5;
+--pale:#F3F7FD;--green:#18866B;--greenbg:#E9F6F0;
+--orange:#B97719;--orangebg:#FFF5E6;
+}
+*{box-sizing:border-box}
+body{
+margin:0;background:#F5F8FD;color:var(--ink);
+font:14px/1.65 -apple-system,BlinkMacSystemFont,
+"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif
+}
+button,input{font:inherit}
+.container{max-width:1180px;margin:auto;padding:30px 25px 55px}
+.hero{
+position:relative;overflow:hidden;padding:35px 39px 29px;
+border-radius:24px;color:white;
+background:linear-gradient(115deg,#102B59,#1555A8 55%,#328BEA);
+box-shadow:0 20px 48px rgba(24,79,151,.18)
+}
+.hero:after{
+content:"";position:absolute;width:420px;height:420px;
+right:-100px;top:-275px;border-radius:50%;
+background:radial-gradient(circle,rgba(130,215,255,.42),transparent 70%)
+}
+.hero-inner{position:relative;z-index:1}
+.eyebrow{font-size:10px;letter-spacing:.18em;font-weight:800;color:#BBDFFF}
+.hero h1{font-size:38px;line-height:1.2;margin:15px 0 9px;letter-spacing:-1px}
+.hero p{color:#D9EAFF;font-size:13px;margin:0;max-width:700px}
+.hero-meta{
+display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;
+margin-top:26px;padding-top:15px;border-top:1px solid #ffffff35;
+color:#D1E4FC;font-size:11px
+}
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin:19px 0 25px}
+.metric{
+background:white;border:1px solid var(--line);border-radius:15px;
+padding:16px 18px;box-shadow:0 4px 15px #14467f08
+}
+.metric-label{font-size:11px;color:var(--muted);font-weight:650}
+.metric-value{font-size:28px;font-weight:800;color:#174B91;line-height:1.35;margin:5px 0}
+.metric-note{font-size:10px;color:#8998AB}
+.toolbar{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:24px 0 20px}
+.nav{display:flex;gap:5px;padding:5px;background:#EAF0F9;border:1px solid var(--line);border-radius:11px}
+.nav button{
+border:0;background:transparent;padding:9px 17px;border-radius:8px;
+color:#687C98;font-size:12px;font-weight:750;cursor:pointer
+}
+.nav button.active{background:white;color:#1768C8;box-shadow:0 3px 10px #14467f16}
+.search{
+width:260px;max-width:45%;padding:10px 13px;border:1px solid var(--line);
+border-radius:10px;background:white;outline:none;font-size:12px
+}
+.search:focus{border-color:#78AEEB;box-shadow:0 0 0 3px #287fe41a}
+.view{display:block}.hidden{display:none!important}
+.section-head{margin:27px 0 16px}
+.kicker{font-size:10px;color:#4284CD;font-weight:800;letter-spacing:.15em}
+.section-head h2{font-size:20px;color:#173A69;margin:3px 0}
+.section-head p{font-size:11px;color:var(--muted);margin:0}
+.badge{
+display:inline-block;border-radius:30px;padding:4px 10px;
+font-size:10px;font-weight:750;white-space:nowrap;
+background:#EAF3FF;color:#2167B7
+}
+.badge.done{background:var(--greenbg);color:var(--green)}
+.badge.pending{background:var(--orangebg);color:var(--orange)}
+.badge.neutral{background:#F0F3F7;color:#69798E}
+.overview-grid{display:grid;grid-template-columns:1.25fr 1fr;gap:15px}
+.panel{
+background:white;border:1px solid var(--line);border-radius:17px;
+padding:20px;box-shadow:0 7px 22px #18417a08
+}
+.panel h3{font-size:14px;margin:0 0 13px;color:#1A3D6C}
+.work-item{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid #EDF1F7}
+.work-item:last-child{border:0}
+.work-index{
+flex:none;width:27px;height:27px;border-radius:8px;background:#EDF4FF;
+color:#2673CB;font-size:11px;font-weight:800;display:grid;place-items:center
+}
+.work-body{flex:1;min-width:0}
+.work-title{font-size:12px;font-weight:750;color:#21436D}
+.work-desc{font-size:11px;color:#657993;margin-top:4px}
+.work-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px}
+.tag{font-size:9px;padding:3px 7px;border-radius:5px;background:#F1F5FA;color:#667C98}
+.priority-list{display:grid;gap:11px}
+.priority{padding:12px;border-radius:10px;background:#F6F9FE;border:1px solid #E8EFF9}
+.priority-title{font-size:11px;font-weight:750;color:#24568F}
+.priority-desc{font-size:10px;color:#71829A;margin-top:4px}
+.insight{
+margin-top:15px;padding:14px 16px;border-radius:12px;
+background:linear-gradient(110deg,#EDF5FF,#F8FBFF);
+border:1px solid #DCEBFA;color:#526D8D;font-size:11px
+}
+.insight strong{color:#205A9D}
+.project-list{display:grid;gap:15px}
+.project{background:white;border:1px solid var(--line);border-radius:17px;overflow:hidden;box-shadow:0 6px 22px #19417808}
+.project-head{padding:18px 21px 14px;border-bottom:1px solid #EEF2F7}
+.project-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.project-code{font-size:10px;color:#6C8EB8;font-weight:800;letter-spacing:.12em}
+.project-name{font-size:16px;color:#173A69;font-weight:780;margin:5px 0 0}
+.project-date{margin-top:8px;color:#7C8DA4;font-size:10px}
+.project-body{padding:18px 21px}
+.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px 24px}
+.field{min-width:0}.field.full{grid-column:1/-1}
+.field-label{font-size:10px;color:#7C90AA;font-weight:800;letter-spacing:.05em;margin-bottom:5px}
+.field-content{font-size:11px;color:#405875;line-height:1.8}
+.deadline{color:#246CC0;font-weight:750}
+.progress-wrap{margin-top:11px;max-width:440px}
+.progress-info{display:flex;justify-content:space-between;font-size:10px;color:#58708F;margin-bottom:6px}
+.progress-track{height:9px;background:#E9F0FA;border-radius:20px;overflow:hidden}
+.progress-bar{height:100%;width:62%;background:linear-gradient(90deg,#1768C8,#52A1F1);border-radius:20px}
+.ar-section{
+margin-top:18px;padding:14px 15px;border:1px solid #F1E5CD;
+background:#FFFCF6;border-radius:12px
+}
+.ar-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.ar-title strong{color:#93651D;font-size:11px}
+.ar-title span{color:#A68A5B;font-size:9px}
+.ar-list{display:grid;gap:10px}
+.ar-item{display:flex;align-items:flex-start;gap:9px}
+.ar-dot{width:6px;height:6px;border-radius:50%;background:#D79C37;margin-top:7px;flex:none}
+.ar-content{flex:1}
+.ar-name{font-size:11px;color:#66502F}
+.ar-meta{font-size:9px;color:#9A896C;margin-top:3px}
+.history{margin-top:17px;padding-top:14px;border-top:1px solid #EEF2F7}
+.history-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.history-title{font-size:10px;color:#6C82A0;font-weight:800;margin-bottom:7px}
+.history-item{font-size:10px;color:#627790;margin:5px 0;line-height:1.65}
+.history-item:before{content:"•";color:#4389D8;margin-right:7px}
+.project-note{margin-top:13px;padding:10px 12px;border-radius:9px;background:#F5F8FC;color:#77889F;font-size:10px}
+.note-box{
+margin-top:22px;padding:14px 17px;background:#EFF5FC;
+border:1px solid #DFEAF7;border-radius:12px;color:#617895;font-size:10px;line-height:1.8
+}
+.footer{
+display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
+border-top:1px solid var(--line);margin-top:28px;padding-top:16px;
+color:#8999AE;font-size:10px
+}
+.empty{
+text-align:center;background:white;border:1px dashed #DCE5F1;
+padding:30px;border-radius:14px;color:#8998AB;font-size:12px
+}
+@media(max-width:760px){
+.container{padding:14px 13px 40px}
+.hero{padding:26px 21px}.hero h1{font-size:30px}
+.metrics{grid-template-columns:repeat(2,1fr);gap:9px}
+.metric{padding:13px}.metric-value{font-size:25px}
+.toolbar{align-items:stretch;flex-direction:column}
+.nav{overflow:auto}.nav button{white-space:nowrap;padding:9px 13px}
+.search{width:100%;max-width:100%}
+.overview-grid{grid-template-columns:1fr}
+.field-grid,.history-grid{grid-template-columns:1fr}
+.field.full{grid-column:auto}
+.project-head,.project-body{padding:15px}
+.project-name{font-size:14px}
+}
+@media print{
+body{background:white}.container{max-width:none;padding:0}
+.hero{print-color-adjust:exact;-webkit-print-color-adjust:exact}
+.toolbar{display:none}.project{break-inside:avoid;box-shadow:none}
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<header class="hero">
+<div class="hero-inner">
+<div class="eyebrow">PERSONAL WORK ARCHIVE · 2026</div>
+<h1>工作进展档案</h1>
+<p>以项目为核心，持续沉淀工作成果、阶段进展与关键行动。聚焦近期工作价值，并对长期项目进行结构化管理。</p>
+<div class="hero-meta">
+<span>工作周期：2026.09—2026.11</span>
+<span>更新日期：2026.11.06 · VERSION 2.1</span>
+</div>
+</div>
+</header>
+
+<section class="metrics">
+<div class="metric">
+<div class="metric-label">项目档案</div>
+<div class="metric-value">07</div>
+<div class="metric-note">项目与专项工作</div>
+</div>
+<div class="metric">
+<div class="metric-label">当前进行中项目</div>
+<div class="metric-value">05</div>
+<div class="metric-note">含客户到访及持续分析工作</div>
+</div>
+<div class="metric">
+<div class="metric-label">三季报客户拆解</div>
+<div class="metric-value">31 / 50</div>
+<div class="metric-note">已完成 62%，剩余 19 家</div>
+</div>
+<div class="metric">
+<div class="metric-label">未完成 AR</div>
+<div class="metric-value">08</div>
+<div class="metric-note">当前活动行动项</div>
+</div>
+</section>
+
+<div class="toolbar">
+<nav class="nav">
+<button class="active" data-view="recent">近期两周工作概述</button>
+<button data-view="projects">项目档案</button>
+</nav>
+<input class="search" id="search" type="search" placeholder="搜索项目、AR 或工作内容...">
+</div>
+
+<main>
+
+<!-- 近期两周工作概述 -->
+<section id="view-recent" class="view">
+<div class="section-head">
+<div class="kicker">RECENT WORK SUMMARY</div>
+<h2>近期两周工作概述</h2>
+<p>统计周期：2026.10.24—2026.11.06</p>
+</div>
+
+<div class="overview-grid">
+<div class="panel">
+<h3>重点工作与阶段成果</h3>
+
+<div class="work-item" data-search="9265 市场洞察 看客户 V5 集团 彦君总">
+<div class="work-index">01</div>
+<div class="work-body">
+<div class="work-title">9265 市场洞察—看客户</div>
+<div class="work-desc">当前迭代至 V5，尚非正式终稿。后续需配合彦君总审核并持续修改，预计 11 月 21 日完成终稿并递交集团。</div>
+<div class="work-tags"><span class="tag">V5</span><span class="tag">彦君总审核</span><span class="tag">11.21 纳期</span></div>
+</div>
+</div>
+
+<div class="work-item" data-search="9265 ICBU 战略解码 V12 STBU 战略房子图 彦君总">
+<div class="work-index">02</div>
+<div class="work-body">
+<div class="work-title">9265 ICBU 战略解码</div>
+<div class="work-desc">当前迭代至 V12。根据彦君总初审意见，对标 STBU 战略房子图完成本轮修正，尚非正式终稿。</div>
+<div class="work-tags"><span class="tag">V12</span><span class="tag">战略房子图对标</span><span class="tag">11.21 纳期</span></div>
+</div>
+</div>
+
+<div class="work-item" data-search="Reclaim Wafer 再生晶圆 市场洞察 投资 ICBU 过会 彬总 孙总">
+<div class="work-index">03</div>
+<div class="work-body">
+<div class="work-title">Reclaim Wafer 市场洞察与投资研究</div>
+<div class="work-desc">完成外部市场竞争研究及前台 BU 销售调研数据测算，经 ICBU 内部探讨与过会，由彬总向孙总汇报。本人负责范围已完成。</div>
+<div class="work-tags"><span class="tag">内部过会</span><span class="tag">本人负责范围已完成</span></div>
+</div>
+</div>
+
+<div class="work-item" data-search="中芯国际 SMIC 王超 客户到访 合作历程 11月8日">
+<div class="work-index">04</div>
+<div class="work-body">
+<div class="work-title">中芯国际客户到访材料支持</div>
+<div class="work-desc">与王超讨论客户到访材料，对合作历程展现形式提出建议。客户预计于 2026 年 11 月 8 日到访。</div>
+<div class="work-tags"><span class="tag">材料讨论完成</span><span class="tag">预计到访 11.08</span></div>
+</div>
+</div>
+
+<div class="work-item" data-search="下游上市客户 三季报 IDM Foundry Fabless 31 50 营收 毛利 净利 存货">
+<div class="work-index">05</div>
+<div class="work-body">
+<div class="work-title">下游上市客户三季报分解</div>
+<div class="work-desc">目标覆盖 50 家，目前完成 31 家，覆盖 IDM、Foundry、Fabless。分析营业收入、毛利、净利及存货；非存储类客户经营情况持续向好，产业呈现正向传导趋势。</div>
+<div class="progress-wrap">
+<div class="progress-info"><span>客户拆解完成度</span><strong>31 / 50 · 62%</strong></div>
+<div class="progress-track"><div class="progress-bar"></div></div>
+</div>
+<div class="work-tags"><span class="tag">剩余 19 家</span><span class="tag">整体进行中</span></div>
+</div>
+</div>
+
+<div class="work-item" data-search="ICBU 组织结构 未来发展 李彬总 Demo 11月4日">
+<div class="work-index">06</div>
+<div class="work-body">
+<div class="work-title">ICBU 组织结构与未来发展材料</div>
+<div class="work-desc">11 月 4 日李彬总提出协助编制 ICBU 组织结构与未来发展材料。目前正在推进，预计下周向彬总汇报初版 Demo 并讨论。</div>
+<div class="work-tags"><span class="tag">新增项目</span><span class="tag">初版 Demo 准备中</span></div>
+</div>
+</div>
+
+</div>
+
+<div class="panel">
+<h3>下一阶段重点工作</h3>
+<div class="priority-list">
+
+<div class="priority">
+<div class="priority-title">01 · 中芯国际客户到访</div>
+<div class="priority-desc">预计 2026.11.08 到访，跟进到访安排及材料支持，并关注会后反馈。</div>
+</div>
+
+<div class="priority">
+<div class="priority-title">02 · ICBU 组织结构与未来发展</div>
+<div class="priority-desc">完成初版 Demo，预计 11 月 9 日—13 日与彬总汇报讨论。最终交付纳期尚未设定（N/A）。</div>
+</div>
+
+<div class="priority">
+<div class="priority-title">03 · 9265 两项集团汇报材料</div>
+<div class="priority-desc">配合彦君总审核，持续修改 V5 / V12，于 11 月 21 日完成终稿并递交集团。</div>
+</div>
+
+<div class="priority">
+<div class="priority-title">04 · 下游上市客户三季报</div>
+<div class="priority-desc">继续完成剩余 19 家客户拆解，补齐四项核心指标并验证行业经营趋势。</div>
+</div>
+
+</div>
+
+<div class="insight">
+<strong>阶段性业务观察</strong><br>
+截至目前，三季报拆解显示非存储类客户经营情况持续向好，产业存在正向传导趋势。当前属于阶段性观察，需结合剩余 19 家客户数据进一步验证。
+</div>
+</div>
+</div>
+
+<div class="note-box">
+<strong>统计口径：</strong>本页面采用最近两周滚动窗口。普通工作事项随周期滚动退出；重要成果、里程碑及决策沉淀至项目档案。未确认的信息不作推断。
+</div>
+</section>
+
+<!-- 项目档案 -->
+<section id="view-projects" class="view hidden">
+<div class="section-head">
+<div class="kicker">PROJECT ARCHIVE</div>
+<h2>项目档案</h2>
+<p>按发起时间倒序排列，统一管理项目背景、进展、纳期、AR 与关键决策。</p>
+</div>
+
+<div class="project-list" id="project-list">
+
+<!-- P07 -->
+<article class="project" data-search="P07 ICBU 组织结构 未来发展 李彬总 Demo">
+<div class="project-head">
+<div class="project-top">
+<div><div class="project-code">P-07 · ORGANIZATION & DEVELOPMENT</div><h3 class="project-name">ICBU 组织结构与未来发展材料</h3></div>
+<span class="badge">进行中</span>
+</div>
+<div class="project-date">发起时间：2026.11.04</div>
+</div>
+<div class="project-body">
+<div class="field-grid">
+<div class="field full">
+<div class="field-label">项目背景 / 意义</div>
+<div class="field-content">李彬总于 2026 年 11 月 4 日提出，希望协助编制 ICBU 组织结构与未来发展相关材料。项目旨在支持 ICBU 组织及未来发展方向的讨论；具体材料使用场景与完整研究范围待进一步确认。</div>
+</div>
+<div class="field full">
+<div class="field-label">当前进展 / 状态</div>
+<div class="field-content">正在准备初版材料，预计下周与彬总进行初版 Demo 汇报与讨论。</div>
+</div>
+<div class="field">
+<div class="field-label">纳期</div>
+<div class="field-content deadline">最终交付纳期：N/A（未设定）<br>近期节点：下周初版 Demo 讨论</div>
+</div>
+<div class="field">
+<div class="field-label">协作对象</div>
+<div class="field-content">李彬总 / 彬总</div>
+</div>
+</div>
+<div class="ar-section">
+<div class="ar-title"><strong>待追踪 AR</strong><span>2 项未完成</span></div>
+<div class="ar-list">
+<div class="ar-item"><span class="ar-dot"></span><div class="ar-content"><div class="ar-name">完成 ICBU 组织结构与未来发展材料初版 Demo</div><div class="ar-meta">计划时间：2026.11.09—11.13</div></div></div>
+<div class="ar-item"><span class="ar-dot"></span><div class="ar-content"><div class="ar-name">与彬总进行初版 Demo 汇报讨论，并根据意见调整</div><div class="ar-meta">计划时间：下周，具体会议时间待确认</div></div></div>
+</div>
+</div>
+<div class="history">
+<div class="history-grid">
+<div><div class="history-title">关键里程碑</div>
+<div class="history-item">2026.11.04：李彬总提出材料编制需求</div>
+<div class="history-item">初版 Demo：计划 11 月 9 日—13 日完成并讨论</div></div>
+<div><div class="history-title">重要决策</div>
+<div class="history-item">暂无已确认的正式组织调整或战略决策</div></div>
+</div>
+</div>
+</div>
+</article>
+
+<!-- P05 -->
+<article class="project" data-search="P05 中芯国际 SMIC 王超 客户到访 合作历程">
+<div class="project-head">
+<div class="project-top">
+<div><div class="project-code">P-05 · CUSTOMER VISIT SUPPORT</div><h3 class="project-name">中芯国际客户到访材料支持</h3></div>
+<span class="badge pending">待客户到访</span>
+</div>
+<div class="project-date">发起时间：2026 年 11 月第一周（具体日期待确认）</div>
+</div>
+<div class="project-body">
+<div class="field-grid">
+<div class="field full">
+<div class="field-label">项目背景 / 意义</div>
+<div class="field-content">围绕中芯国际客户到访准备相关材料，通过展示合作历程体现双方合作基础与发展情况。</div>
+</div>
+<div class="field full">
+<div class="field-label">当前进展 / 状态</div>
+<div class="field-content">已与王超进行材料探讨，并对合作历程的展现形式提出建议。客户预计于 2026 年 11 月 8 日到访，尚未实际发生。</div>
+</div>
+<div class="field">
+<div class="field-label">纳期</div>
+<div class="field-content deadline">预计客户到访：2026.11.08</div>
+</div>
+<div class="field">
+<div class="field-label">协作对象</div>
+<div class="field-content">王超</div>
+</div>
+</div>
+<div class="ar-section">
+<div class="ar-title"><strong>待追踪 AR</strong><span>1 项未完成</span></div>
+<div class="ar-list">
+<div class="ar-item"><span class="ar-dot"></span><div class="ar-content"><div class="ar-name">跟进 11 月 8 日客户到访安排，确认材料准备及到访结果</div><div class="ar-meta">计划时间：2026.11.08</div></div></div>
+</div>
+</div>
+<div class="history">
+<div class="history-grid">
+<div><div class="history-title">关键里程碑</div>
+<div class="history-item">2026 年 11 月第一周：与王超讨论材料</div>
+<div class="history-item">提出合作历程呈现形式优化建议</div>
+<div class="history-item">预计 2026.11.08 客户到访</div></div>
+<div><div class="history-title">重要决策</div>
+<div class="history-item">暂无已确认的客户合作决策</div></div>
+</div>
+</div>
+</div>
+</article>
+
+<!-- P06 -->
+<article class="project" data-search="P06 三季报 上市客户 IDM Foundry Fabless 营收 毛利 净利 存货 50 31">
+<div class="project-head">
+<div class="project-top">
+<div><div class="project-code">P-06 · LISTED CUSTOMER ANALYSIS</div><h3 class="project-name">下游上市客户三季报分解</h3></div>
+<span class="badge">进行中</span>
+</div>
+<div class="project-date">发起时间：2026 年 11 月第一周（具体日期待确认）</div>
+</div>
+<div class="project-body">
+<div class="field-grid">
+<div class="field full">
+<div class="field-label">项目背景 / 意义</div>
+<div class="field-content">对下游上市客户日历年第三季度财务及经营情况进行拆解，通过不同类型半导体厂商的经营表现，观察下游需求及产业景气度的传导情况。</div>
+</div>
+<div class="field full">
+<div class="field-label">当前进展 / 状态</div>
+<div class="field-content">计划覆盖 50 家客户，目前已完成 31 家，覆盖 IDM、Foundry、Fabless。分析指标包括营业收入、毛利、净利及存货。初步观察显示，非存储类客户经营情况持续向好，产业存在正向传导趋势。整体客户拆解尚未全部完成。</div>
+<div class="progress-wrap">
+<div class="progress-info"><span>客户拆解进度</span><strong>31 / 50 · 62%</strong></div>
+<div class="progress-track"><div class="progress-bar"></div></div>
+</div>
+</div>
+<div class="field">
+<div class="field-label">纳期</div>
+<div class="field-content">尚未提供明确纳期</div>
+</div>
+<div class="field">
+<div class="field-label">工作量</div>
+<div class="field-content">目标 50 家 / 已完成 31 家 / 剩余 19 家</div>
+</div>
+</div>
+<div class="ar-section">
+<div class="ar-title"><strong>待追踪 AR</strong><span>1 项未完成</span></div>
+<div class="ar-list">
+<div class="ar-item"><span class="ar-dot"></span><div class="ar-content"><div class="ar-name">完成剩余 19 家上市客户的三季报拆解，补齐营收、毛利、净利及存货分析</div><div class="ar-meta">计划时间：待确认</div></div></div>
+</div>
+</div>
+<div class="history">
+<div class="history-grid">
+<div><div class="history-title">关键里程碑</div>
+<div class="history-item">2026 年 11 月第一周：完成 31 家客户拆解</div>
+<div class="history-item">明确目标覆盖 50 家，剩余 19 家待完成</div>
+<div class="history-item">形成非存储类客户经营向好的初步观察</div></div>
+<div><div class="history-title">重要决策</div>
+<div class="history-item">暂无已确认的正式经营决策</div></div>
+</div>
+</div>
+</div>
+</article>
+
+<!-- P03 -->
+<article class="project" data-search="P03 Reclaim Wafer 再生晶圆 孙总 彬总 ICBU 市场 竞争 投资">
+<div class="project-head">
+<div class="project-top">
+<div><div class="project-code">P-03 · NEW BUSINESS RESEARCH</div><h3 class="project-name">Reclaim Wafer 市场洞察与投资研究</h3></div>
+<span class="badge done">本人负责范围已完成</span>
+</div>
+<div class="project-date">发起时间：2026.10.26</div>
+</div>
+<div class="project-body">
+<div class="field-grid">
+<div class="field full">
+<div class="field-label">项目背景 / 意义</div>
+<div class="field-content">孙总在营销委员会提出考虑投资再生晶圆项目，由此启动市场洞察与业务切入研究，为公司判断潜在投资机会提供市场及需求依据。</div>
+</div>
+<div class="field full">
+<div class="field-label">当前进展 / 状态</div>
+<div class="field-content">本人负责的市场研究及需求测算工作已完成。项目经 ICBU 内部探讨与过会，并由彬总向孙总汇报。孙总汇报后的投资决策结果目前无法获知。</div>
+</div>
+<div class="field">
+<div class="field-label">纳期</div>
+<div class="field-content">本人负责范围已完成；后续投资决策时间未知</div>
+</div>
+<div class="field">
+<div class="field-label">项目成果</div>
+<div class="field-content">市场竞争研究 + 前台 BU 销售调研数据测算</div>
+</div>
+</div>
+<div class="history">
+<div class="history-grid">
+<div><div class="history-title">关键里程碑</div>
+<div class="history-item">2026.10.26：项目启动</div>
+<div class="history-item">完成外部市场及竞争对手研究</div>
+<div class="history-item">完成前台 BU 销售调研数据分解测算</div>
+<div class="history-item">ICBU 内部探讨与过会</div>
+<div class="history-item">彬总向孙总汇报</div></div>
+<div><div class="history-title">重要决策</div>
+<div class="history-item">营销委员会提出考虑投资再生晶圆项目</div>
+<div class="history-item">最终投资决策及孙总反馈暂无法获知</div></div>
+</div>
+</div>
+<div class="project-note">结项口径：仅表示本人承担的市场洞察与需求测算工作已完成，不代表公司已经作出最终投资决策。当前无已确认的未完成 AR。</div>
+</div>
+</article>
+
+<!-- P04 -->
+<article class="project" data-search="P04 长江存储 杨书鹏 LTA 拜访材料">
+<div class="project-head">
+<div class="project-top">
+<div><div class="project-code">P-04 · CUSTOMER SUPPORT</div><h3 class="project-name">长江存储客户拜访材料支持</h3></div>
+<span class="badge neutral">材料支持完成</span>
+</div>
+<div class="project-date">发起时间：2026.10.21</div>
+</div>
+<div class="project-body">
+<div class="field-grid">
+<div class="field full">
+<div class="field-label">项目背景 / 意义</div>
+<div class="field-content">协助杨书鹏准备长江存储客户拜访材料，支持 LTA（长期供货协议）谈判与沟通。</div>
+</div>
+<div class="field full">
+<div class="field-label">当前进展 / 状态</div>
+<div class="field-content">已完成拜访材料修改。据目前了解，材料应该已经向客户进行汇报，但实际汇报结果及后续沟通情况尚未核实。</div>
+</div>
+<div class="field">
+<div class="field-label">纳期</div>
+<div class="field-content">材料支持已完成；实际汇报日期待核实</div>
+</div>
+<div class="field">
+<div class="field-label">协作对象</div>
+<div class="field-content">杨书鹏</div>
+</div>
+</div>
+<div class="history">
+<div class="history-grid">
+<div><div class="history-title">关键里程碑</div>
+<div class="history-item">2026.10.21：协助修改拜访材料</div>
+<div class="history-item">材料据悉已向客户汇报，尚待核实</div></div>
+<div><div class="history-title">重要决策</div>
+<div class="history-item">涉及 LTA 谈判与沟通，具体谈判结论未知</div></div>
+</div>
+</div>
+<div class="project-note">目前未确认存在待执行 AR。客户汇报及 LTA 反馈未知，暂不将其推定为已完成商务事项。</div>
+</div>
+</article>
+
+<!-- P01 -->
+<article class="project" data-search="P01 9265 市场洞察 看客户 集团汇报 V5 彦君总">
+<div class="project-head">
+<div class="project-top">
+<div><div class="project-code">P-01 · 9265 GROUP REPORT</div><h3 class="project-name">9265 市场洞察—看客户</h3></div>
+<span class="badge">进行中</span>
+</div>
+<div class="project-date">发起时间：2026.09.08</div>
+</div>
+<div class="project-body">
+<div class="field-grid">
+<div class="field full">
+<div class="field-label">项目背景 / 意义</div>
+<div class="field-content">根据公司 9265 集团汇报要求，围绕客户维度开展市场洞察并形成专题汇报材料。具体分析目标与业务价值可后续进一步补充。</div>
+</div>
+<div class="field full">
+<div class="field-label">当前进展 / 状态</div>
+<div class="field-content">当前个人迭代版本为第 5 版，尚非正式终稿。后续可能根据审核意见持续修改，中间涉及彦君总审核。预计 11 月 21 日完成终稿并递交集团。</div>
+</div>
+<div class="field">
+<div class="field-label">纳期</div>
+<div class="field-content deadline">2026.11.21 · 集团终稿递交</div>
+</div>
+<div class="field">
+<div class="field-label">当前版本</div>
+<div class="field-content">V5 / 非终稿</div>
+</div>
+</div>
+<div class="ar-section">
+<div class="ar-title"><strong>待追踪 AR</strong><span>2 项未完成</span></div>
+<div class="ar-list">
+<div class="ar-item"><span class="ar-dot"></span><div class="ar-content"><div class="ar-name">配合彦君总审核，并根据反馈持续修改材料</div><div class="ar-meta">计划时间：终稿递交前，具体审核时间待确认</div></div></div>
+<div class="ar-item"><span class="ar-dot"></span><div class="ar-content"><div class="ar-name">完成正式终稿并递交集团</div><div class="ar-meta">纳期：2026.11.21</div></div></div>
+</div>
+</div>
+<div class="history">
+<div class="history-grid">
+<div><div class="history-title">关键里程碑</div>
+<div class="history-item">2026.09.08：项目启动</div>
+<div class="history-item">当前迭代至 V5</div></div>
+<div><div class="history-title">重要决策</div>
+<div class="history-item">终稿递交集团计划为 2026.11.21</div>
+<div class="history-item">中间安排彦君总审核</div></div>
+</div>
+</div>
+</div>
+</article>
+
+<!-- P02 -->
+<article class="project" data-search="P02 9265 ICBU 战略解码 V12 彦君总 STBU 战略房子图">
+<div class="project-head">
+<div class="project-top">
+<div><div class="project-code">P-02 · 9265 GROUP REPORT</div><h3 class="project-name">9265 ICBU 战略解码</h3></div>
+<span class="badge">进行中</span>
+</div>
+<div class="project-date">发起时间：2026.09.08</div>
+</div>
+<div class="project-body">
+<div class="field-grid">
+<div class="field full">
+<div class="field-label">项目背景 / 意义</div>
+<div class="field-content">根据公司 9265 集团汇报要求，对 ICBU 业务战略进行解码，形成面向集团的战略专题汇报材料。</div>
+</div>
+<div class="field full">
+<div class="field-label">当前进展 / 状态</div>
+<div class="field-content">当前个人迭代版本为第 12 版，尚非正式终稿。本周根据彦君总初审意见，对标 STBU 战略房子图完成修正。后续仍可能持续修改，中间涉及彦君总审核。预计 11 月 21 日完成终稿并递交集团。</div>
+</div>
+<div class="field">
+<div class="field-label">纳期</div>
+<div class="field-content deadline">2026.11.21 · 集团终稿递交</div>
+</div>
+<div class="field">
+<div class="field-label">当前版本</div>
+<div class="field-content">V12 / 非终稿</div>
+</div>
+</div>
+<div class="ar-section">
+<div class="ar-title"><strong>待追踪 AR</strong><span>2 项未完成</span></div>
+<div class="ar-list">
+<div class="ar-item"><span class="ar-dot"></span><div class="ar-content"><div class="ar-name">配合彦君总审核，并根据反馈持续修改战略解码材料</div><div class="ar-meta">计划时间：终稿递交前，具体审核时间待确认</div></div></div>
+<div class="ar-item"><span class="ar-dot"></span><div class="ar-content"><div class="ar-name">完成正式终稿并递交集团</div><div class="ar-meta">纳期：2026.11.21</div></div></div>
+</div>
+</div>
+<div class="history">
+<div class="history-grid">
+<div><div class="history-title">关键里程碑</div>
+<div class="history-item">2026.09.08：项目启动</div>
+<div class="history-item">累计迭代至 V12</div>
+<div class="history-item">2026 年 11 月第一周：完成对标 STBU 战略房子图修正</div></div>
+<div><div class="history-title">重要决策</div>
+<div class="history-item">采用 STBU 战略房子图作为本轮修正参考</div>
+<div class="history-item">终稿递交集团计划为 2026.11.21</div>
+<div class="history-item">中间安排彦君总审核</div></div>
+</div>
+</div>
+</div>
+</article>
+
+</div>
+
+<div class="note-box">
+<strong>项目排序说明：</strong>
+P-07 按 11 月 4 日准确日期排列；P-05、P-06 的启动时间目前仅确认在 11 月第一周，具体先后顺序待核实。其余项目按准确发起日期倒序排列。
+<br>
+<strong>AR 说明：</strong>
+当前仅展示未完成事项。完成后从活动列表移出，并将完成日期及结果归入对应项目历史；不以已完成 AR 占用活动列表。
+</div>
+</section>
+
+<div id="no-results" class="empty hidden">没有找到匹配内容，请更换搜索关键词。</div>
+</main>
+
+<footer class="footer">
+<span>WORK PROGRESS ARCHIVE · PROJECT-CENTRIC MANAGEMENT</span>
+<span>VERSION 2.1 · 2026.11.06</span>
+</footer>
+
+</div>
+
+<script>
+(function(){
+const buttons=[...document.querySelectorAll(".nav button")];
+const views=[...document.querySelectorAll(".view")];
+const search=document.getElementById("search");
+const empty=document.getElementById("no-results");
+let active="recent";
+
+function switchView(name){
+active=name;
+buttons.forEach(b=>b.classList.toggle("active",b.dataset.view===name));
+views.forEach(v=>v.classList.toggle("hidden",v.id!=="view-"+name));
+filter();
+}
+
+function filter(){
+const q=search.value.trim().toLowerCase();
+const view=document.getElementById("view-"+active);
+const items=[...view.querySelectorAll("[data-search]")];
+let count=0;
+items.forEach(el=>{
+const content=(el.dataset.search+" "+el.textContent).toLowerCase();
+const match=!q||content.includes(q);
+el.classList.toggle("hidden",!match);
+if(match)count++;
+});
+empty.classList.toggle("hidden",!q||count>0);
+}
+
+buttons.forEach(b=>b.addEventListener("click",()=>switchView(b.dataset.view)));
+search.addEventListener("input",filter);
+})();
+</script>
+</body>
+</html>
